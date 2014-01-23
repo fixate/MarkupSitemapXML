@@ -1,4 +1,4 @@
-# MarkupSitemapXML - Index Children Of 404 Version
+# MarkupSitemapXML - Index Children Of 404 Templates
 
 ## Purpose
 
