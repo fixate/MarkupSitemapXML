@@ -47,7 +47,7 @@ class MarkupSitemapXML extends WireData implements Module {
 					$startpage = "/".$multisite->subdomain.$startpage;
 				}
 			}
-			
+
 			// make sure that page used as root for sitemap actually exists
 			if ($this->pages->get($startpage) instanceof NullPage) return;
 
@@ -81,12 +81,15 @@ class MarkupSitemapXML extends WireData implements Module {
 
 	public function sitemapListPage($page) {
 		$entry = "";
-		if ($page->viewable() && ($page->sitemap_ignore == 0 || $page->path == '/')) { // $page->path part added so that it ignores hiding the homepage, else you wouldn't have ANY pages returned
-			$modified = date ('Y-m-d', $page->modified);
-			$entry = "\n  <url>\n";
-			$entry .= "    <loc>{$page->httpUrl}</loc>\n";
-			$entry .= "    <lastmod>{$modified}</lastmod>\n";
-			$entry .= "  </url>";
+		if (($page->viewable() || $page->children("include=all")) && ($page->sitemap_ignore == 0 || $page->path == '/')) { // $page->path part added so that it ignores hiding the homepage, else you wouldn't have ANY pages returned
+			if ($page->viewable()) {
+				$modified = date ('Y-m-d', $page->modified);
+				$entry = "\n  <url>\n";
+				$entry .= "    <loc>{$page->httpUrl}</loc>\n";
+				$entry .= "    <lastmod>{$modified}</lastmod>\n";
+				$entry .= "  </url>";
+			}
+
 			$children = $page->children($this->pageselector);
 			if(count($children)) {
 				foreach($children as $child) {
